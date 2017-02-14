@@ -1,0 +1,1 @@
+IOS会阻断所有非HTTPS的请求，如果需要使用HTTP请求，那么需要在xcode去设置info.list
