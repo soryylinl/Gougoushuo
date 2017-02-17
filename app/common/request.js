@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import { lodash } from 'lodash';
+import lodash  from 'lodash';
 import Mock from 'mockjs';
 import config from './config';
 

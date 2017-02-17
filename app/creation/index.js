@@ -1,72 +1,74 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView, TouchableHighlight, Image, Dimensions, ActivityIndicator, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, ListView, TouchableHighlight, Image,
+    Dimensions, ActivityIndicator, RefreshControl, AlertIOS } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import request from './../common/request';
 import config from './../common/config';
+import Detail from './detail';
 
 const width=Dimensions.get('window').width;
 
 const initData=[
     {
-        "_id": "64000019930503144X",
+        "id": "64000019930503144X",
         "thumb": require('./../image/1.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "710000198302267821",
+        "id": "710000198302267821",
         "thumb": require('./../image/2.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "340000200312248406",
+        "id": "340000200312248406",
         "thumb": require('./../image/3.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "420000197210318608",
+        "id": "420000197210318608",
         "thumb": require('./../image/4.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "650000199702087297",
+        "id": "650000199702087297",
         "thumb": require('./../image/5.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "150000197111146729",
+        "id": "150000197111146729",
         "thumb": require('./../image/6.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "460000200804133856",
+        "id": "460000200804133856",
         "thumb": require('./../image/7.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "330000199607270320",
+        "id": "330000199607270320",
         "thumb": require('./../image/8.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "540000198607215377",
+        "id": "540000198607215377",
         "thumb": require('./../image/9.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     },
     {
-        "_id": "630000198812012327",
+        "id": "630000198812012327",
         "thumb": require('./../image/10.jpg'),
         "title": "我的面包故事",
-        "video": "blob:http://www.imooc.com/17b60259-f8a1-4b22-8b79-565e002ce89d"
+        "video": "http://www.w3school.com.cn/i/movie.ogg"
     }
 ]
 
@@ -90,6 +92,77 @@ let cachedResults={
     total:0
 }
 
+
+//将list组件化
+class Item extends React.Component{
+
+    constructor(props){
+        super(props);
+        let rowData=this.props.rowData;
+        this.state={
+            rowData:rowData,
+            up:rowData.voted,
+        }
+
+        this.up=this.up.bind(this);
+    }
+
+    up() {
+        let rowData = this.state.rowData;
+        let up = !this.state.up;  //传入的状态
+        let params = {
+            id: rowData.id,
+            accessToken: 'ss',
+            up: up ? '1' : '0'
+        }
+
+        let url = config.api.base + config.api.up;
+
+        request.post(url, params)
+            .then((data) => {
+                if (data && data.success) {
+                    this.setState({
+                        up: up
+                    })
+                }
+                else {
+                    AlertIOS.alert('点赞失败，稍后重试......');
+                }
+            })
+            .catch((err)=>{
+                console.log(err);
+                AlertIOS.alert('点赞失败，稍后重试......');
+            })
+    }
+
+    render(){
+        return (
+            <TouchableHighlight onPress={this.props.onSelect}>
+                <View style={styles.item}>
+                    <Text style={styles.title}>{this.state.rowData.title}</Text>
+                    <Image source={this.state.rowData.thumb} style={styles.thumb}>
+                        <Icon name="ios-play" size={28} style={styles.play}/>
+                    </Image>
+                    <View style={styles.itemFooter}>
+                        <View style={styles.handleBox}>
+                            <Icon name={this.state.up?"ios-heart":"ios-heart-outline"}
+                                  size={28}
+                                  style={[styles.up,this.state.up?null:styles.down]}
+                                  onPress={this.up}
+                            />
+                            <Text style={styles.handleText} onPress={this.up}>喜欢</Text>
+                        </View>
+                        <View style={styles.handleBox}>
+                            <Icon name="ios-alarm-outline" size={28} style={styles.commentIcon}/>
+                            <Text style={styles.handleText}>评论</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableHighlight>
+        )
+    }
+}
+
 export default class List extends React.Component {
 
     constructor(props){
@@ -107,28 +180,12 @@ export default class List extends React.Component {
         this.fetchMoreData=this.fetchMoreData.bind(this);
         this.renderFooter=this.renderFooter.bind(this);
         this.onRefresh=this.onRefresh.bind(this);
+        this.loadPage=this.loadPage.bind(this);
     }
 
     renderRow(rowData){
         return (
-            <TouchableHighlight>
-                <View style={styles.item}>
-                    <Text style={styles.title}>{rowData.title}</Text>
-                    <Image source={rowData.thumb} style={styles.thumb}>
-                        <Icon name="ios-play" size={28} style={styles.play}/>
-                    </Image>
-                    <View style={styles.itemFooter}>
-                        <View style={styles.handleBox}>
-                            <Icon name="ios-heart-outline" size={28} style={styles.up}/>
-                            <Text style={styles.handleText}>喜欢</Text>
-                        </View>
-                        <View style={styles.handleBox}>
-                            <Icon name="ios-alarm-outline" size={28} style={styles.commentIcon}/>
-                            <Text style={styles.handleText}>评论</Text>
-                        </View>
-                    </View>
-                </View>
-            </TouchableHighlight>
+            <Item key={rowData.id} onSelect={()=>this.loadPage(rowData)} rowData={rowData}/>
         )
     }
 
@@ -263,6 +320,16 @@ export default class List extends React.Component {
         this.fetchData(0);
     }
 
+    loadPage(rowData){
+        this.props.navigator.push({
+            name:'detail',
+            component:Detail,
+            params:{
+                data:rowData
+            }
+        })
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -286,8 +353,8 @@ export default class List extends React.Component {
                             onRefresh={this.onRefresh}
                             title='拼命加载中...'
                             titleColor="#ff6600"
-          />
-        }
+                        />
+                    }
                 />
             </View>
         )
@@ -358,6 +425,10 @@ const styles = {
         color:'#333'
     },
     up:{
+        fontSize:22,
+        color:'#ed7b66'
+    },
+    down:{
         fontSize:22,
         color:'#333'
     },

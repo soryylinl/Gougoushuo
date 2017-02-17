@@ -1,9 +1,9 @@
-#.DS_Store
-#.idea
-#/__tests__
-#android
-#index.android.js
-#.gitignore
-#/ios
+.DS_Store
+.idea
+/__tests__
+android
+index.android.js
+.gitignore
+/ios
 /node_modules
-#yarn.lock
+yarn.lock

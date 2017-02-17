@@ -5,31 +5,15 @@
  */
 
 import React, {Component} from 'react';
-import {AppRegistry, StyleSheet, Text, View, TabBarIOS} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {AppRegistry, StyleSheet, Text, View, TabBarIOS,
+    Navigator } from 'react-native';
+
 
 import List from './app/creation/index';
 import Edit from './app/edit/index';
 import Account from './app/account/index';
 
-const styles = {
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-}
 
 export default class Gougoushuo extends React.Component {
     constructor(props) {
@@ -60,7 +44,19 @@ export default class Gougoushuo extends React.Component {
                     selected={this.state.componentName==='List'}>
 
                     {/*子视图，通过selected属性的值(true/false)控制显示/隐藏*/}
-                    <List/>
+                    <Navigator
+                        initialRoute={{
+                            name:'list',
+                            component:List
+                        }}
+                        configureScene={(route)=>{
+                            return Navigator.SceneConfigs.FloatFromRight
+                        }}
+                        renderScene={(route,navigator)=>{
+                            let Component=route.component;
+                            return <Component {...route.params} navigator={navigator}/>
+                        }}
+                    />
                 </Icon.TabBarItem>
                 <Icon.TabBarItem
                     iconName="ios-recording-outline"
