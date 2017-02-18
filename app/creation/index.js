@@ -343,10 +343,10 @@ export default class List extends React.Component {
                     renderRow={this.renderRow}
                     enableEmptySections={true}
                     automaticallyAdjustContentInsets={false}
+                    showsVerticalScrollIndicator={false}
                     onEndReached={this.fetchMoreData}
                     onEndReachedThreshold={20}
                     renderFooter={this.renderFooter}
-                    showsVerticalScrollIndicator={false}
                     refreshControl={
                         <RefreshControl
                             refreshing={this.state.isRefreshing}
