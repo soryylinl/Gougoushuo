@@ -1,5 +1,5 @@
 .DS_Store
-.idea
+/.idea
 /__tests__
 android
 index.android.js
