@@ -12,7 +12,7 @@ import {AppRegistry, StyleSheet, Text, View, TabBarIOS,
 
 import List from './app/creation/index';
 import Edit from './app/edit/index';
-import Account from './app/account/index';
+import Login from './app/account/login';
 
 
 export default class Gougoushuo extends React.Component {
@@ -47,7 +47,7 @@ export default class Gougoushuo extends React.Component {
                     <Navigator
                         initialRoute={{
                             name:'list',
-                            component:List
+                            component:Login
                         }}
                         configureScene={(route)=>{
                             return Navigator.SceneConfigs.FloatFromRight
@@ -74,7 +74,7 @@ export default class Gougoushuo extends React.Component {
                     selected={this.state.componentName==='Account'}>
 
                     {/*子视图，通过selected属性的值(true/false)控制显示/隐藏*/}
-                    <Account/>
+                    <Login/>
                 </Icon.TabBarItem>
             </TabBarIOS>
         );

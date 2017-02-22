@@ -664,7 +664,7 @@ const styles = {
     loadingText: {
         color: '#777',
         textAlign: 'center',
-        top:40
+        top:60
     },
     listHeader:{
         marginTop:10,
